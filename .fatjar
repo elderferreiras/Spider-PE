@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Mon Jun 11 19:17:51 GMT-03:00 2012
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=true
+jarname=C\:\\Users\\spider\\Desktop\\Spider-PE.jar
+manifest.mergeall=true
+manifest.mainclass=br.ufpa.spider.pe.view.JDialog_Spider_Login
+manifest.file=<createnew>
+jarname.isextern=true
+onejar.expand=
+excludes=
+includes=
