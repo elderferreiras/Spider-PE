@@ -14,7 +14,7 @@ import br.ufpa.spider.pe.model.Marco;
 import br.ufpa.spider.pe.model.Processo;
 import br.ufpa.spider.pe.model.ProdutoTrabalho;
 import br.ufpa.spider.pe.model.Tarefa;
-import br.ufpa.spider.pe.view.JDialog_Spider_Login;
+import br.ufpa.spider.pe.view.Spider_PE_Home;
 
 public class TarefaDAO extends GenericDAO{
 	public static void createTarefa(Tarefa tarefa){

@@ -14,30 +14,30 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import br.ufpa.spider.pe.model.util.DataBaseManager;
-import br.ufpa.spider.pe.view.JDialogOpcaoCadastrarPolitica;
-import br.ufpa.spider.pe.view.JDialog_Spider_Login;
-import br.ufpa.spider.pe.view.JPanelAvalicaoProcesso;
-import br.ufpa.spider.pe.view.JPanelAvalicaoProduto;
-import br.ufpa.spider.pe.view.JPanelCadastroRisco;
-import br.ufpa.spider.pe.view.JPanelCapacidades;
-import br.ufpa.spider.pe.view.JPanelCronogramaTarefas;
-import br.ufpa.spider.pe.view.JPanelDefinicaoMedicao;
-import br.ufpa.spider.pe.view.JPanelEstimarEsforco;
-import br.ufpa.spider.pe.view.JPanelGerenciaEsforco;
-import br.ufpa.spider.pe.view.JPanelGerenciaRecursos;
-import br.ufpa.spider.pe.view.JPanelGerenciaResponsabilidade;
-import br.ufpa.spider.pe.view.JPanelGerenciaRisco;
-import br.ufpa.spider.pe.view.JPanelNovaPoliticaOrganizacional;
-import br.ufpa.spider.pe.view.JPanelPlanoComunicacao;
-import br.ufpa.spider.pe.view.JPanelPoliticaOrganizacionalDefinida;
-import br.ufpa.spider.pe.view.JPanelProdutoTrabalho;
-import br.ufpa.spider.pe.view.JPanelRevisaoMedicao;
-import br.ufpa.spider.pe.view.JPanelRevisaoProblemas;
-import br.ufpa.spider.pe.view.JPanelRevisaoProcesso;
-import br.ufpa.spider.pe.view.JPanelRevisaoProdutoTrabalho;
-import br.ufpa.spider.pe.view.JPanelStakeHolder;
 import br.ufpa.spider.pe.view.Spider_PE_Home;
-import br.ufpa.spider.pe.view.jPanelTreinamento;
+import br.ufpa.spider.pe.view.management.JDialogOpcaoCadastrarPolitica;
+import br.ufpa.spider.pe.view.management.JPanelAvalicaoProcesso;
+import br.ufpa.spider.pe.view.management.JPanelAvalicaoProduto;
+import br.ufpa.spider.pe.view.management.JPanelCadastroRisco;
+import br.ufpa.spider.pe.view.management.JPanelCapacidades;
+import br.ufpa.spider.pe.view.management.JPanelCronogramaTarefas;
+import br.ufpa.spider.pe.view.management.JPanelDefinicaoMedicao;
+import br.ufpa.spider.pe.view.management.JPanelEstimarEsforco;
+import br.ufpa.spider.pe.view.management.JPanelGerenciaEsforco;
+import br.ufpa.spider.pe.view.management.JPanelGerenciaRecursos;
+import br.ufpa.spider.pe.view.management.JPanelGerenciaResponsabilidade;
+import br.ufpa.spider.pe.view.management.JPanelGerenciaRisco;
+import br.ufpa.spider.pe.view.management.JPanelNovaPoliticaOrganizacional;
+import br.ufpa.spider.pe.view.management.JPanelPlanoComunicacao;
+import br.ufpa.spider.pe.view.management.JPanelPoliticaOrganizacionalDefinida;
+import br.ufpa.spider.pe.view.management.JPanelProdutoTrabalho;
+import br.ufpa.spider.pe.view.management.JPanelRevisaoMedicao;
+import br.ufpa.spider.pe.view.management.JPanelRevisaoProblemas;
+import br.ufpa.spider.pe.view.management.JPanelRevisaoProcesso;
+import br.ufpa.spider.pe.view.management.JPanelRevisaoProdutoTrabalho;
+import br.ufpa.spider.pe.view.management.JPanelStakeHolder;
+import br.ufpa.spider.pe.view.management.Spider_PE_Management;
+import br.ufpa.spider.pe.view.management.jPanelTreinamento;
 
 public class TreeMouseListenerAction extends MouseAdapter {
 
@@ -53,14 +53,14 @@ public class TreeMouseListenerAction extends MouseAdapter {
 
 	@Override
 	public void mouseClicked(java.awt.event.MouseEvent evt) {
-		if(JDialog_Spider_Login.getInstance().Spider_PE_Home.getProcesso()!=null){
+		if(Spider_PE_Home.getInstance().Spider_PE_Management.getProcesso()!=null){
 		if (evt.getClickCount() == 1) {
-			JDialog_Spider_Login.getInstance().Spider_PE_Home.setCursor(
+			Spider_PE_Home.getInstance().Spider_PE_Management.setCursor(
 					new Cursor(Cursor.WAIT_CURSOR));
 			jTree.setCursor(
 					new Cursor(Cursor.WAIT_CURSOR));
 			jPanel.removeAll();
-			JDialog_Spider_Login.getInstance().Spider_PE_Home.repaint();
+			Spider_PE_Home.getInstance().Spider_PE_Management.repaint();
 			
 			if (jTree.getSelectionPath() != null) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree
@@ -245,11 +245,11 @@ public class TreeMouseListenerAction extends MouseAdapter {
 				}
 
 			}			
-			JDialog_Spider_Login.getInstance().Spider_PE_Home.setCursor(
+			Spider_PE_Home.getInstance().Spider_PE_Management.setCursor(
 					new Cursor(Cursor.DEFAULT_CURSOR));
 			jTree.setCursor(
 					new Cursor(Cursor.DEFAULT_CURSOR));
-			JDialog_Spider_Login.getInstance().Spider_PE_Home.validate();
+			Spider_PE_Home.getInstance().Spider_PE_Management.validate();
 		}
 	  }
 		else

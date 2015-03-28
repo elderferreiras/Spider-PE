@@ -11,17 +11,17 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import br.ufpa.spider.pe.view.JDialogOpcaoCadastrarPolitica;
-import br.ufpa.spider.pe.view.JDialog_Spider_Login;
-import br.ufpa.spider.pe.view.JPanelNovaPoliticaOrganizacional;
-import br.ufpa.spider.pe.view.JPanelPoliticaOrganizacionalDefinida;
 import br.ufpa.spider.pe.view.Spider_PE_Home;
-import br.ufpa.spider.pe.view.Spider_PE_Settings;
-import br.ufpa.spider.pe.view.set.JPanelFerramentaAvaliacao;
-import br.ufpa.spider.pe.view.set.JPanelFerramentaComunicacao;
-import br.ufpa.spider.pe.view.set.JPanelFerramentaEstimativa;
-import br.ufpa.spider.pe.view.set.JPanelFerramentaGestaoMudanca;
-import br.ufpa.spider.pe.view.set.JPanelFerramentaMedicao;
+import br.ufpa.spider.pe.view.administration.JPanelFerramentaAvaliacao;
+import br.ufpa.spider.pe.view.administration.JPanelFerramentaComunicacao;
+import br.ufpa.spider.pe.view.administration.JPanelFerramentaEstimativa;
+import br.ufpa.spider.pe.view.administration.JPanelFerramentaGestaoMudanca;
+import br.ufpa.spider.pe.view.administration.JPanelFerramentaMedicao;
+import br.ufpa.spider.pe.view.administration.Spider_PE_Administration;
+import br.ufpa.spider.pe.view.management.JDialogOpcaoCadastrarPolitica;
+import br.ufpa.spider.pe.view.management.JPanelNovaPoliticaOrganizacional;
+import br.ufpa.spider.pe.view.management.JPanelPoliticaOrganizacionalDefinida;
+import br.ufpa.spider.pe.view.management.Spider_PE_Management;
 
 
 
@@ -40,7 +40,7 @@ public class TreeMouseListenerAdmin extends MouseAdapter {
 	public void mouseClicked(java.awt.event.MouseEvent evt) {
 		if (evt.getClickCount() == 1) {			
 			if (jTree.getSelectionPath() != null) {	
-				JDialog_Spider_Login.getInstance().Spider_PE_Settings.setCursor(new Cursor(Cursor.WAIT_CURSOR));	
+				Spider_PE_Home.getInstance().Spider_PE_Settings.setCursor(new Cursor(Cursor.WAIT_CURSOR));	
 
 				jPanel.removeAll();
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree
@@ -83,8 +83,8 @@ public class TreeMouseListenerAdmin extends MouseAdapter {
 					c.weighty = 1;
 					jPanel.add(panel, c);
 				}
-				JDialog_Spider_Login.getInstance().Spider_PE_Settings.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				JDialog_Spider_Login.getInstance().Spider_PE_Settings.validate();
+				Spider_PE_Home.getInstance().Spider_PE_Settings.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				Spider_PE_Home.getInstance().Spider_PE_Settings.validate();
 			}
 		}
 		

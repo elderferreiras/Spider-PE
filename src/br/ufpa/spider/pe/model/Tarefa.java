@@ -28,8 +28,8 @@ import org.hibernate.type.CalendarDateType;
 import br.ufpa.spider.pe.model.dao.TarefaDAO;
 import br.ufpa.spider.pe.model.dao.TipoDAO;
 import br.ufpa.spider.pe.model.util.ProcessManagerController;
-import br.ufpa.spider.pe.view.pm.logic.ExecutionController;
-import br.ufpa.spider.pe.view.pm.logic.TimeController;
+import br.ufpa.spider.pe.view.execution.logic.ExecutionController;
+import br.ufpa.spider.pe.view.execution.logic.TimeController;
 
 @Entity(name="tarefa")
 public class Tarefa {

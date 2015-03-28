@@ -1,123 +1,132 @@
 package br.ufpa.spider.pe.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
-import javax.swing.JTree;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-import javax.swing.tree.TreePath;
 
+import br.ufpa.spider.pe.model.Atividade;
+import br.ufpa.spider.pe.model.GerenteProcesso;
 import br.ufpa.spider.pe.model.Humano;
-import br.ufpa.spider.pe.model.Iteracao;
-import br.ufpa.spider.pe.model.Processo;
-import br.ufpa.spider.pe.view.pm.gui.GraphComponent;
-import br.ufpa.spider.pe.view.pm.gui.TreeCellRenderer;
-import br.ufpa.spider.pe.view.pm.gui.TreeNode;
-import br.ufpa.spider.pe.view.pm.logic.ComponentImageFile;
-import br.ufpa.spider.pe.view.pm.logic.ModellingController;
-import br.ufpa.spider.pe.view.pm.model.DiagramComponent;
-import br.ufpa.spider.pe.view.pm.model.Modelling;
-import br.ufpa.spider.pe.view.pm.persistence.ModellingFileManager;
-import br.ufpa.spider.pe.view.set.JDialogSenha;
-import br.ufpa.spider.pe.view.util.Icone;
-import br.ufpa.spider.pe.view.util.TreeMouseListenerAction;
+import br.ufpa.spider.pe.model.Tarefa;
+import br.ufpa.spider.pe.model.Transicao;
+import br.ufpa.spider.pe.model.dao.AtividadeDAO;
+import br.ufpa.spider.pe.model.dao.GerenteProcessoDAO;
+import br.ufpa.spider.pe.model.dao.HumanoDAO;
+import br.ufpa.spider.pe.model.dao.TarefaDAO;
+import br.ufpa.spider.pe.model.dao.TransicaoDAO;
+import br.ufpa.spider.pe.model.set.Usuario;
+import br.ufpa.spider.pe.model.set.dao.UsuarioDAO;
+import br.ufpa.spider.pe.view.administration.Spider_PE_Administration;
+import br.ufpa.spider.pe.view.execution.gui.Spider_PE_Execution;
+import br.ufpa.spider.pe.view.management.JDialogWelcome;
+import br.ufpa.spider.pe.view.management.Spider_PE_Management;
 
-import com.mxgraph.model.mxCell;
-import javax.swing.JProgressBar;
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
-public class Spider_PE_Home extends JFrame {
-	private JSplitPane jSplitPane;
-	private JPanel jPanelBackGround;
-	private JMenuBar jMenuBarHome;
-	private JMenu jMenuVisoes;
-	private JMenu jMenuTipos;
-	private JMenu jMenuAjuda;
-	private JPanel jPanelNorte;
-	private JToolBar jToolBarAcessivel;
-	private JButton jButtonHome;
-	private JButton jButtonReport;
-	private JButton jButtonHistory;
-	private JButton jButtonLogout;
-	private JLabel jLabelLogoSpiderPe;
-	private JLabel JLabelProcesso;
-	private static JComboBox jComboBoxProcesso;
-	private JSplitPane splitPane;
-	private JSplitPane jSplitPanel;
-	private JTabbedPane jTabbedPaneOeste;
-	private JPanel jPanelGestao;
-	private JPanel jPanelLeste;
-	private JFrame jFrameTipos;
-	private Iteracao iteracao;
-	private TreeMouseListenerAction treeMouseListenerAction;
-	private JMenuItem mntmTipos;
-	private JLabel lblNewLabel;
-	private JMenuItem menuItem;
-	private JMenuItem menuItem_1;
-	private JMenuItem mntmSobreASpiderpe;
-	private JMenuItem mntmPolticaOrganizacional;
-	private JMenuItem mntmTarefasDoProcesso;
-	private JMenuItem mntmRecursosHumanos;
-	private JMenuItem mntmRiscosIdentificados;
-	private JMenuItem mntmTreinamentosPrevistos;
-	private JMenu menu;
-	private JMenuItem menuItem_3;
-	private JMenuItem menuItem_4;
-	private JMenu mnRecursos;
-	private JMenuItem mntmGerenciar;
-	private JMenu mnGerenciarAmbiente;
-	private JMenuItem mntmHardware;
-	private JMenuItem mntmSoftwrare;
+public class Spider_PE_Home extends JDialog {
+
+	private final JPanel contentPanel = new JPanel();
+	private JTextField jTextFieldUsuario;
+	private JPasswordField jTextFieldSenha;
+	private JButton jButtonEntrar;
+	private JLabel lblSenha;
+	private JLabel lblUsurio;
+	private JButton jButtonSair;
 	
-	Spider_PE_Home() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Spider_PE_Home.class.getResource("/br/ufpa/spider/pe/img/config/favicon_pe.png")));			
-		initComponents();
+	 
+	private JLabel label;
+	private JComboBox comboBox;
+	private int logado = 0;
+	
+	public final static int ADMIN = 1;
+	public static int getAdmin() {
+		return ADMIN;
 	}
 
+	public static int getGerente() {
+		return GERENTE;
+	}
 
-	private void initComponents() {
-		setExtendedState(Frame.MAXIMIZED_BOTH);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 955, 469);
-		setTitle("Spider-PE");
-		// defini��o do look and feel
+	public static int getRh() {
+		return RH;
+	}
+
+	public final static int GERENTE = 2;
+	public final static int RH = 3;
+	
+	public static Spider_PE_Home home= new Spider_PE_Home();
+	public static Spider_PE_Management Spider_PE_Management = null;
+	public static Spider_PE_Administration Spider_PE_Settings = null;
+	public static Spider_PE_Execution execution = null;
+	Usuario usuario;
+	GerenteProcesso gerenteProcesso;
+	Humano humano;
+		
+	public static void main(String[] args) {
+		try {
+			executar();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void executar() {
+		JDialogWelcome.getInstance().setVisible(true);
+		
+		Thread run = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				
+				if(UsuarioDAO.findAll().isEmpty() || UsuarioDAO.findAll() == null)
+				{
+					Usuario admin = new Usuario();
+					admin.setLogin("admin");
+					admin.setSenha("admin");
+					admin.setNome("Administrador");
+					UsuarioDAO.createUsuario(admin);
+				}
+				
+				JDialogWelcome.removeProgressBar();
+				JDialogWelcome.getInstance().repaint();
+				home.getInstance().setVisible(true);				
+			}
+		});
+			
+		run.start();
+		
+		
+	}
+
+	/**
+	 * Create the dialog.
+	 */
+	public Spider_PE_Home() {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setModal(true);
+		getContentPane().setBackground(Color.WHITE);
+		//this.setUndecorated(true);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Spider_PE_Home.class.getResource("/br/ufpa/spider/pe/view/util/img/favicon_pe.png")));
 		try {
 			String nomeSO = System.getProperty("os.name");
 			if(nomeSO.contains("Linux")){
@@ -137,591 +146,250 @@ public class Spider_PE_Home extends JFrame {
 		} catch (UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} 
+		setTitle("Spider - PE (Login)");
+		setBounds(100, 100, 285, 171);
+		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		GridBagLayout gbl_contentPanel = new GridBagLayout();
+		gbl_contentPanel.columnWidths = new int[]{53, 0, 0, 0, 0};
+		gbl_contentPanel.rowHeights = new int[]{0, 34, 32, 31, 0};
+		gbl_contentPanel.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		contentPanel.setLayout(gbl_contentPanel);
+		{
+			label = new JLabel("Tipo de Login");
+			GridBagConstraints gbc_label = new GridBagConstraints();
+			gbc_label.insets = new Insets(0, 0, 5, 5);
+			gbc_label.gridx = 0;
+			gbc_label.gridy = 0;
+			contentPanel.add(label, gbc_label);
 		}
-		// fim da defini��o do look and feel
-
-		jMenuBarHome = new JMenuBar();
-		jMenuBarHome.setBorder(null);
-		jMenuBarHome.setBorderPainted(false);
-		setJMenuBar(jMenuBarHome);
-		jMenuVisoes = new JMenu("Visualizar");
-		jMenuTipos = new JMenu("Tipos");
-		jMenuAjuda = new JMenu("Ajuda");
-		
-		menu = new JMenu("Usu\u00E1rio");
-		jMenuBarHome.add(menu);
-		
-		menuItem_3 = new JMenuItem("Alterar Acesso");
-		menuItem_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				jButtonAlterarAcesso();
-			}
-		});
-		menu.add(menuItem_3);
-		
-		menuItem_4 = new JMenuItem("Logoff");
-		menuItem_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButtonLogout();
-			}
-		});
-		menu.add(menuItem_4);
-		jMenuBarHome.add(jMenuVisoes);
-		
-		mntmPolticaOrganizacional = new JMenuItem("Pol\u00EDtica Organizacional");
-		jMenuVisoes.add(mntmPolticaOrganizacional);
-		
-		mntmTarefasDoProcesso = new JMenuItem("Tarefas do Processo");
-		jMenuVisoes.add(mntmTarefasDoProcesso);
-		
-		mntmRecursosHumanos = new JMenuItem("Recursos Humanos");
-		jMenuVisoes.add(mntmRecursosHumanos);
-		
-		mntmRiscosIdentificados = new JMenuItem("Riscos Identificados");
-		jMenuVisoes.add(mntmRiscosIdentificados);
-		
-		mntmTreinamentosPrevistos = new JMenuItem("Treinamentos Previstos");
-		jMenuVisoes.add(mntmTreinamentosPrevistos);
-		jMenuBarHome.add(jMenuTipos);
-		
-		mntmTipos = new JMenuItem("Gerenciar");
-		mntmTipos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-					jMenuItemActionPerformed(arg0);
-			}
-		});
-		jMenuTipos.add(mntmTipos);
-		
-		mnRecursos = new JMenu("Recursos");
-		jMenuBarHome.add(mnRecursos);
-		
-		mntmGerenciar = new JMenuItem("Gerenciar Humanos");
-		mntmGerenciar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButtonGerenciarHumanos();
-			}
-		});
-		mnRecursos.add(mntmGerenciar);
-		
-		mnGerenciarAmbiente = new JMenu("Gerenciar Ambiente");
-		mnRecursos.add(mnGerenciarAmbiente);
-		
-		mntmHardware = new JMenuItem("Hardware");
-		mntmHardware.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButtonHardware();
-			}
-		});
-		mnGerenciarAmbiente.add(mntmHardware);
-		
-		mntmSoftwrare = new JMenuItem("Software");
-		mntmSoftwrare.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButtonSoftware();
-			}
-		});
-		mnGerenciarAmbiente.add(mntmSoftwrare);
-		
-		
-		jMenuBarHome.add(jMenuAjuda);
-		
-		menuItem = new JMenuItem("Manual Spider-PE");
-		jMenuAjuda.add(menuItem);
-		
-		menuItem_1 = new JMenuItem("Especifica\u00E7\u00E3o T\u00E9cnica xSPIDER_ML");
-		jMenuAjuda.add(menuItem_1);
-		
-		mntmSobreASpiderpe = new JMenuItem("Sobre a Spider-PE");
-		jMenuAjuda.add(mntmSobreASpiderpe);
-
-		jPanelBackGround = new JPanel();
-		jPanelBackGround.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(jPanelBackGround);
-
-		GridBagLayout gbl_jPanelBackGround = new GridBagLayout(); // cria��o do
-																	// gridbaglayout
-																	// para o
-																	// panel
-		gbl_jPanelBackGround.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 0,
-				29, 0, 0, 41, 48, 33, 0, 0, 0, 0, 0, 27, 0, 0, 0, 0, 0, 0, 0,
-				0, 0, 0 };
-		gbl_jPanelBackGround.rowHeights = new int[] { 62, -15, 50, 0, 0, 23, 0,
-				0, 0, 0, 0, 0 };
-		gbl_jPanelBackGround.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				1.0, Double.MIN_VALUE };
-		gbl_jPanelBackGround.rowWeights = new double[] { 0.0, 1.0, 1.0, 1.0,
-				0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		jPanelBackGround.setLayout(gbl_jPanelBackGround);
-															// gridbaglayout ao
-															// panel
-
-		jPanelNorte = new JPanel();
-		jPanelNorte.setBorder(null);
-		jPanelNorte.setForeground(UIManager.getColor("Button.background"));
-
-		GridBagConstraints gbc_jPanelNorte = new GridBagConstraints();
-		gbc_jPanelNorte.anchor = GridBagConstraints.NORTH;
-		gbc_jPanelNorte.gridwidth = 29;
-		gbc_jPanelNorte.insets = new Insets(0, 0, 5, 0);
-		gbc_jPanelNorte.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jPanelNorte.gridx = 0;
-		gbc_jPanelNorte.gridy = 0;
-		jPanelBackGround.add(jPanelNorte, gbc_jPanelNorte);
-
-		GridBagLayout gbl_jPanelNorte = new GridBagLayout(); // cria��o do
-																// gridbaglayout
-																// para o panel
-		gbl_jPanelNorte.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 0, 600, 145, 0, 0 };
-		gbl_jPanelNorte.rowHeights = new int[] { 0, 25, 0 };
-		gbl_jPanelNorte.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 1.0, 1.0, 0.0,
-				Double.MIN_VALUE };
-		gbl_jPanelNorte.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
-		jPanelNorte.setLayout(gbl_jPanelNorte); // adiciona o gridbaglayout ao
-		
-		lblNewLabel = new JLabel("Bem-vindo, "  + JDialog_Spider_Login.getInstance().getInstanciaLogado());
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel.gridx = 9;
-		gbc_lblNewLabel.gridy = 0;
-		jPanelNorte.add(lblNewLabel, gbc_lblNewLabel);
-												// panel
-
-		jToolBarAcessivel = new JToolBar();
-		jToolBarAcessivel.setBorderPainted(false);
-		jToolBarAcessivel.setBorder(new EmptyBorder(0, 0, 0, 0));
-		jToolBarAcessivel.setFloatable(false);
-		GridBagConstraints gbc_jToolBarAcessivel = new GridBagConstraints();
-		gbc_jToolBarAcessivel.fill = GridBagConstraints.BOTH;
-		gbc_jToolBarAcessivel.gridheight = 2;
-		gbc_jToolBarAcessivel.gridwidth = 7;
-		gbc_jToolBarAcessivel.insets = new Insets(0, 0, 0, 5);
-		gbc_jToolBarAcessivel.gridx = 0;
-		gbc_jToolBarAcessivel.gridy = 0;
-		jPanelNorte.add(jToolBarAcessivel, gbc_jToolBarAcessivel);
-
-		// adicionar botoes ao JToolBar
-		jButtonHome = new JButton("");
-		jButtonHome.setMargin(new Insets(1, 1, 1, 1));
-		jButtonHome.setToolTipText("Home");
-		jButtonHome.setBorderPainted(false);
-		jButtonHome.setBorder(new EmptyBorder(5, 5, 5, 5));
-		jButtonHome.setIcon(new Icone().getHome());
-		jToolBarAcessivel.add(jButtonHome);
-
-		jButtonReport = new JButton("");
-		jButtonReport.setMargin(new Insets(1, 1, 1, 1));
-		jButtonReport.setToolTipText("Relat\u00F3rios");
-		jButtonReport.setBorder(new EmptyBorder(5, 5, 5, 5));
-		jButtonReport.setBorderPainted(false);
-		jButtonReport.setIcon(new Icone().getReport());
-		jToolBarAcessivel.add(jButtonReport);
-
-		jButtonHistory = new JButton("");
-		jButtonHistory.setMargin(new Insets(1, 1, 1, 1));
-		jButtonHistory.setToolTipText("Log de Execu\u00E7\u00E3o");
-		jButtonHistory.setBorderPainted(false);
-		jButtonHistory.setBorder(new EmptyBorder(5, 5, 5, 5));
-		jButtonHistory.setIcon(new Icone().getHistory());
-		jToolBarAcessivel.add(jButtonHistory);
-
-		jButtonLogout = new JButton("");
-		jButtonLogout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				jButtonLogout();
-			}
-		});
-		jButtonLogout.setMargin(new Insets(1, 1, 1, 1));
-		jButtonLogout.setToolTipText("Logout");
-		jButtonLogout.setBorder(new EmptyBorder(5, 5, 5, 5));
-		jButtonLogout.setBorderPainted(false);
-		jButtonLogout.setIcon(new Icone().getLogout());
-		jToolBarAcessivel.add(jButtonLogout);
-		// fim da criacao de um JToolBar para "alterar senha"
-
-		// setar a logo do spider
-		jLabelLogoSpiderPe = new JLabel("");
-		jLabelLogoSpiderPe.setBorder(new EmptyBorder(0, 100, 0, 0));
-		jLabelLogoSpiderPe.setIcon(new Icone().getLogo_spider_pe());
-		GridBagConstraints gbc_jLabelLogoSpiderPe = new GridBagConstraints();
-		gbc_jLabelLogoSpiderPe.gridheight = 3;
-		gbc_jLabelLogoSpiderPe.insets = new Insets(0, 0, 0, 5);
-		gbc_jLabelLogoSpiderPe.gridx = 7;
-		gbc_jLabelLogoSpiderPe.gridy = 0;
-		jPanelNorte.add(jLabelLogoSpiderPe, gbc_jLabelLogoSpiderPe);
-		// fim do setar a logo do spider
-
-		JLabelProcesso = new JLabel("Processo:");
-		JLabelProcesso.setIcon(new Icone().getProcess());
-		GridBagConstraints gbc_JLabelProcesso = new GridBagConstraints();
-		gbc_JLabelProcesso.insets = new Insets(0, 0, 0, 5);
-		gbc_JLabelProcesso.anchor = GridBagConstraints.EAST;
-		gbc_JLabelProcesso.gridx = 8;
-		gbc_JLabelProcesso.gridy = 1;
-		jPanelNorte.add(JLabelProcesso, gbc_JLabelProcesso);
-
-		jComboBoxProcesso = new JComboBox();		
-		ItemListener listener = new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				try {
-					setCursor(new Cursor(Cursor.WAIT_CURSOR));
-					itemListenerStateChaged(e);
-					setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+		{
+			comboBox = new JComboBox();
+			GridBagConstraints gbc_comboBox = new GridBagConstraints();
+			gbc_comboBox.gridwidth = 3;
+			gbc_comboBox.insets = new Insets(0, 0, 5, 0);
+			gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+			gbc_comboBox.gridx = 1;
+			gbc_comboBox.gridy = 0;
+			contentPanel.add(comboBox, gbc_comboBox);
+		}
+		{
+			lblUsurio = new JLabel("Usu\u00E1rio: ");
+			GridBagConstraints gbc_lblUsurio = new GridBagConstraints();
+			gbc_lblUsurio.insets = new Insets(0, 0, 5, 5);
+			gbc_lblUsurio.anchor = GridBagConstraints.WEST;
+			gbc_lblUsurio.gridx = 0;
+			gbc_lblUsurio.gridy = 1;
+			contentPanel.add(lblUsurio, gbc_lblUsurio);
+		}
+		{
+			jTextFieldUsuario = new JTextField();
+			GridBagConstraints gbc_jTextFieldUsuario = new GridBagConstraints();
+			gbc_jTextFieldUsuario.gridwidth = 3;
+			gbc_jTextFieldUsuario.insets = new Insets(0, 0, 5, 0);
+			gbc_jTextFieldUsuario.fill = GridBagConstraints.HORIZONTAL;
+			gbc_jTextFieldUsuario.gridx = 1;
+			gbc_jTextFieldUsuario.gridy = 1;
+			contentPanel.add(jTextFieldUsuario, gbc_jTextFieldUsuario);
+			jTextFieldUsuario.setColumns(10);
+		}
+		{
+			lblSenha = new JLabel("Senha:");
+			GridBagConstraints gbc_lblSenha = new GridBagConstraints();
+			gbc_lblSenha.insets = new Insets(0, 0, 5, 5);
+			gbc_lblSenha.anchor = GridBagConstraints.WEST;
+			gbc_lblSenha.gridx = 0;
+			gbc_lblSenha.gridy = 2;
+			contentPanel.add(lblSenha, gbc_lblSenha);
+		}
+		{
+			jTextFieldSenha = new JPasswordField();
+			jTextFieldSenha.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	                    jButtonEntrar();
+	                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+	                }  
 				}
+			});
+			GridBagConstraints gbc_jTextFieldSenha = new GridBagConstraints();
+			gbc_jTextFieldSenha.gridwidth = 3;
+			gbc_jTextFieldSenha.insets = new Insets(0, 0, 5, 0);
+			gbc_jTextFieldSenha.fill = GridBagConstraints.HORIZONTAL;
+			gbc_jTextFieldSenha.gridx = 1;
+			gbc_jTextFieldSenha.gridy = 2;
+			contentPanel.add(jTextFieldSenha, gbc_jTextFieldSenha);
+		}
+		{
+			jButtonSair = new JButton("Sair");
+			jButtonSair.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					System.exit(0);					
+				}
+			});
+			jButtonSair.setIcon(new ImageIcon(Spider_PE_Home.class.getResource("/br/ufpa/spider/pe/view/util/img/off.png")));
+			jButtonSair.setActionCommand("Cancel");
+			GridBagConstraints gbc_jButtonSair = new GridBagConstraints();
+			gbc_jButtonSair.insets = new Insets(0, 0, 0, 5);
+			gbc_jButtonSair.gridx = 2;
+			gbc_jButtonSair.gridy = 3;
+			contentPanel.add(jButtonSair, gbc_jButtonSair);
+		}
+		{
+			jButtonEntrar = new JButton("Entrar");
+			jButtonEntrar.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent arg0) {
+					if (arg0.getKeyCode() == arg0.VK_ENTER) { 
+						setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	                    jButtonEntrar();
+	                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+	                }  
+				}
+			});
+			jButtonEntrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    jButtonEntrar();
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+				}
+			});
+			GridBagConstraints gbc_jButtonEntrar = new GridBagConstraints();
+			gbc_jButtonEntrar.anchor = GridBagConstraints.EAST;
+			gbc_jButtonEntrar.gridx = 3;
+			gbc_jButtonEntrar.gridy = 3;
+			contentPanel.add(jButtonEntrar, gbc_jButtonEntrar);
+			jButtonEntrar.setIcon(new ImageIcon(Spider_PE_Home.class.getResource("/br/ufpa/spider/pe/view/util/img/on.png")));
+			jButtonEntrar.setActionCommand("Cancel");
+		}
+		populaComboBox();
+		
+		jTextFieldSenha.setText("123456");
+		jTextFieldUsuario.setText("elderf@gmail.com");
+		comboBox.setSelectedItem("Usu�rio do Processo");
+		/*
+		jTextFieldSenha.setText("123");
+		jTextFieldUsuario.setText("andrecunhas@gmail.com");
+>>>>>>> .r1058
+		comboBox.setSelectedItem("Gerente do Processo");
+		*/
+
+		setLocationRelativeTo(null);
+		
+	}
+
+	private void populaComboBox() {
+		comboBox.removeAllItems();
+		comboBox.addItem("Gerente do Processo");
+		comboBox.addItem("Administrador");
+		comboBox.addItem("Usu\u00E1rio do Processo");
+	}
+
+	protected void jButtonEntrar() {
+		if(comboBox.getSelectedItem().toString().equals("Gerente do Processo")){
+			gerenteProcesso();
+		} else if(comboBox.getSelectedItem().toString().equals("Usu\u00E1rio do Processo")){
+			recursoHumano();
+		} else if(comboBox.getSelectedItem().toString().equals("Administrador")){
+			administrador();
+		}
+	}
+
+	private void administrador() {
+		if(UsuarioDAO.findByLogin(jTextFieldUsuario.getText())==null){
+			JOptionPane.showMessageDialog(null, "Usu\u00E1rio inv\u00E1lido.");
+		} else {
+			usuario = UsuarioDAO.findByLogin(jTextFieldUsuario.getText());
+			if(login(usuario, jTextFieldSenha.getText())){
+				dispose();
+				JDialogWelcome.getInstance().setVisible(false);
+				logado = ADMIN;
+				Spider_PE_Settings = new Spider_PE_Administration();
+				Spider_PE_Settings.setVisible(true);
 			}
-		};
-		
-		jComboBoxProcesso.addItemListener(listener);
-		jComboBoxProcesso.setPreferredSize(new Dimension(200, 20));
-		jComboBoxProcesso.setToolTipText("Selecione...");
-		
-		GridBagConstraints gbc_jComboBoxProcesso = new GridBagConstraints();
-		gbc_jComboBoxProcesso.anchor = GridBagConstraints.EAST;
-		gbc_jComboBoxProcesso.gridx = 9;
-		gbc_jComboBoxProcesso.gridy = 1;
-		jPanelNorte.add(jComboBoxProcesso,
-				gbc_jComboBoxProcesso);
+			else JOptionPane.showMessageDialog(null, "Senha inv\u00E1lida.");		
+		}
+	}
+	
 
-		jPanelLeste = new JPanel();
-		JPanel jPanelOeste = new JPanel();
-		jPanelOeste.setMinimumSize(new Dimension(350, 10));
-		jPanelOeste.setPreferredSize(new Dimension(200, 10));
-
-		jSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jPanelOeste,
-				jPanelLeste);
-		
-		jPanelLeste.setLayout(new BorderLayout(1, 1));
-		
-		GridBagLayout gbl_jPanelOeste = new GridBagLayout();
-		gbl_jPanelOeste.columnWidths = new int[] { 0, 0, 0, 0, 0, 0, 57, 0 };
-		gbl_jPanelOeste.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 0 };
-		gbl_jPanelOeste.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 1.0, Double.MIN_VALUE };
-		gbl_jPanelOeste.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		jPanelOeste.setLayout(gbl_jPanelOeste);
-
-		jTabbedPaneOeste = new JTabbedPane(JTabbedPane.TOP);
-		GridBagConstraints gbc_jTabbedPaneOeste = new GridBagConstraints();
-		gbc_jTabbedPaneOeste.gridheight = 11;
-		gbc_jTabbedPaneOeste.gridwidth = 7;
-		gbc_jTabbedPaneOeste.fill = GridBagConstraints.BOTH;
-		gbc_jTabbedPaneOeste.gridx = 0;
-		gbc_jTabbedPaneOeste.gridy = 0;
-		jPanelOeste.add(jTabbedPaneOeste, gbc_jTabbedPaneOeste);
-
-		jPanelGestao = new JPanelArvore();
-		
-		treeMouseListenerAction = new TreeMouseListenerAction(((JPanelArvore) jPanelGestao).getArvore(), getjPanelLeste());
-		
-		((JPanelArvore) jPanelGestao).getArvore().addMouseListener(treeMouseListenerAction);
-		jTabbedPaneOeste.addTab("Gest\u00E3o", null, jPanelGestao, null);
-		
-		panelProcess = new JPanel();
-		jTabbedPaneOeste.addTab("Processo", null, panelProcess, null);
-		panelProcess.setLayout(new BorderLayout(0, 0));
-		
-		splitPane_1 = new JSplitPane();
-		splitPane_1.setDividerLocation(350);
-		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		panelProcess.add(splitPane_1);
-		
-		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setPreferredSize(new Dimension(10, 10));
-		splitPane_1.setLeftComponent(scrollPane_1);
-		
-		treeProcess = new JTree();
-		treeProcess.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                treeMouseClicked(evt);
-            }
-			@Override
-			public void mouseReleased(MouseEvent evt) {				
-				 JTree tree = (JTree) evt.getSource();	        
-			     final TreePath treePath = tree.getSelectionPath(); 
-			     final GraphComponent graph = ModellingController.getGraphComponent(((TreeNode) treePath.getLastPathComponent()).getId());
-			     if (treePath != null) {
-				
-				 final JPopupMenu popup = new JPopupMenu();  
-				    JMenuItem menuItemForkJuncao = new JMenuItem("Exportar PNG");
-				    popup.add(menuItemForkJuncao);  
-				    menuItemForkJuncao.setIcon(new ImageIcon(Icone.class.getResource(ComponentImageFile.PNG)));  
-				    menuItemForkJuncao.addActionListener(new ActionListener() {				
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							if(graph != null){
-								int miny = graph.getHeight();
-								int minx = graph.getWidth();
-								int maxy = 0;
-								int maxx = 0;
-								Dimension d = graph.getGraphControl().getSize();								
-								 Object[] cells = graph.getGraph().getChildCells(graph.getGraph().getDefaultParent());
-							        for (Object cellobj : cells) {
-							        	mxCell cell = (mxCell) cellobj;
-							        	if(cell.getValue().getClass() == DiagramComponent.class){
-				    	 					DiagramComponent dc = ((DiagramComponent) cell.getValue());
-							        		
-				    	 					if(dc.getY()<=miny){
-				    	 						long x = (long) Math.round(dc.getY());				    	 						
-				    	 						miny = (int)x;
-				    	 					} 
-				    	 					else if(dc.getY()>=maxy){
-				    	 						long x = (long) Math.round(dc.getY());				    	 						
-				    	 						maxy = (int)x;
-				    	 					}
-				    	 					
-				    	 					if(dc.getX()<=minx){
-				    	 						long x = (long) Math.round(dc.getX());				    	 						
-				    	 						minx = (int)x;
-				    	 					} else if(dc.getX() >= maxx){
-				    	 						long x = (long) Math.round(dc.getX());				    	 						
-				    	 						maxx = (int)x;
-				    	 					}
-				    	 					
-							        	}
-							        }
-							        
-								BufferedImage image = new BufferedImage(maxx + 60, maxy + 60, BufferedImage.TYPE_INT_ARGB);
-								Graphics2D g = image.createGraphics();
-								graph.getGraphControl().paint(g);
-								
-								JFileChooser fileChooser = new JFileChooser();
-
-							    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-							    fileChooser.showSaveDialog(null);
-							    
-								final File outputfile = new File(fileChooser.getSelectedFile().getPath()+"\\"+Modelling.getModelling().getComponent(((TreeNode) treePath.getLastPathComponent()).getId()).getName()+".png");
-								try {
-									ImageIO.write(image, "png", outputfile);
-								} catch (IOException e1) {
-									// TODO Auto-generated catch block
-									e1.printStackTrace();
-								}
-							}						
-						}
-					});
-				    
-				    if(graph!=null)
-				  if(((TreeNode) treePath.getLastPathComponent()).getId() == ModellingController.getComponentShowingDiagramId())
-				    if (evt.isPopupTrigger()) {  
-		                popup.show(evt.getComponent(),  
-		                		evt.getX(), evt.getY());  
-		            }  
-			     }
+	private void gerenteProcesso() {
+		if(GerenteProcessoDAO.findByLogin(jTextFieldUsuario.getText())==null){
+			JOptionPane.showMessageDialog(null, "Login inv\u00E1lido.");
+		} else {
+			humano = GerenteProcessoDAO.findByLogin(jTextFieldUsuario.getText());
+			if(login(humano, jTextFieldSenha.getText())){
+				dispose();
+				JDialogWelcome.getInstance().setVisible(false);
+				logado = GERENTE;
+				Spider_PE_Management = new Spider_PE_Management();
+				Spider_PE_Management.setVisible(true);
 			}
-        });	
-		scrollPane_1.setViewportView(treeProcess);
-		
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		splitPane_1.setRightComponent(tabbedPane);
-		
-		scrollPane = new JScrollPane();
-		tabbedPane.addTab("Informa\u00e7\u00f5es", null, scrollPane, null);
-
-		GridBagConstraints gbc_jSplitPanel = new GridBagConstraints();
-		gbc_jSplitPanel.gridheight = 10;
-		gbc_jSplitPanel.gridwidth = 29;
-		gbc_jSplitPanel.fill = GridBagConstraints.BOTH;
-		gbc_jSplitPanel.gridx = 0;
-		gbc_jSplitPanel.gridy = 1;
-		jPanelBackGround.add(jSplitPanel, gbc_jSplitPanel);
-
-		splitPane = new JSplitPane();
-		GridBagConstraints gbc_splitPane = new GridBagConstraints();
-		gbc_splitPane.fill = GridBagConstraints.BOTH;
-		gbc_splitPane.insets = new Insets(0, 0, 0, 5);
-		gbc_splitPane.gridx = 0;
-		gbc_splitPane.gridy = 0;
-
-		jPanelOeste = new JPanel();
-		splitPane.setLeftComponent(jPanelOeste);
-		populaComboBoxProcesso();
-	}
-
-
-	protected void jButtonGerenciarHumanos() {
-		JDialogGerenciarHumanos dialog = new JDialogGerenciarHumanos();
-		dialog.setLocationRelativeTo(null);
-		dialog.setVisible(true);
-	}
-	protected void jButtonSoftware() {
-		JDialogGerenciarSoftware dialog = new JDialogGerenciarSoftware();
-		dialog.setLocationRelativeTo(null);
-		dialog.setVisible(true);
-		
-	}
-
-	protected void jButtonHardware() {
-		JDialogGerenciarHardware dialog = new JDialogGerenciarHardware();
-		dialog.setLocationRelativeTo(null);
-		dialog.setVisible(true);
-	}
-
-	
-	protected void jButtonAlterarAcesso() {
-		try{
-			Humano humano = (Humano) JDialog_Spider_Login.getInstance().getInstanciaLogado();
-			JDialogSenha senha = new JDialogSenha(humano);
-			senha.setLocationRelativeTo(null);
-			senha.setVisible(true);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-	}
-	
-	 private void treeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_treeMouseClicked
-	        JTree tree = (JTree) evt.getSource();	        
-	        TreePath treePath = tree.getSelectionPath();
-	        if (treePath != null) {
-	            if (evt.getClickCount() == 2) {
-	            	jPanelLeste.removeAll();
-	            	jPanelLeste.setLayout(new BorderLayout(1, 1));
-	            	jPanelLeste.add(diagramTabbedPane);
-	        		
-	                ModellingController.setSelectedComponent(((TreeNode) treePath.getLastPathComponent()).getId());
-	                tree.expandPath(treePath);
-	            } else if (evt.getClickCount() == 1) {	   
-	            	ModellingController.setElementToShowProperties(((TreeNode) treePath.getLastPathComponent()).getId());
-	            }
-	        }
-	}
-
-
-	protected void jButtonPasswordAdmin() {
-		JDialogSenha dialog = new JDialogSenha(JDialog_Spider_Login.getInstance().getInstanciaLogado());
-		dialog.setLocationRelativeTo(null);
-		dialog.setVisible(true);
-	}
-
-	protected void jButtonLogout() {
-		dispose();
-		JDialog_Spider_Login.getInstance().setVisible(true);
-	}
-	
-	JTabbedPane diagramTabbedPane;
-	JPanel diagramPanel;
-	private JPanel panelProcess;
-	private JSplitPane splitPane_1;
-	private JScrollPane scrollPane_1;
-	private JTabbedPane tabbedPane;
-	private JTree treeProcess;
-	private JScrollPane scrollPane;
-	private JMenu mnPegarImagem;
-	private JMenuItem mntmCatch;
-	
-	protected void itemListenerStateChaged(ItemEvent e) throws FileNotFoundException, IOException {
-		
-		diagramTabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		
-		diagramPanel = new JPanel();
-		diagramTabbedPane.addTab("",diagramPanel);
-		diagramPanel.setLayout(new BorderLayout(0, 0));
-		scrollPane.setViewportView(null);
-		
-		if(e.getStateChange() == ItemEvent.SELECTED) { 		
-			jPanelLeste.removeAll();
-			jPanelLeste.repaint();
-		}
-		
-		 if(!jComboBoxProcesso.getSelectedItem().toString().equals("Selecione...")){
-				Processo processo = (Processo) jComboBoxProcesso.getSelectedItem();
-				
-				byte[] b  = processo.getProcesso_xml();
-			       
-		        File fileDestiny =  File.createTempFile(processo.getNome(), ".xml");	
-		       
-		        try {
-		        	FileOutputStream o = new FileOutputStream(fileDestiny);       
-					o.write(b); 
-			        o.close();
-				} catch (IOException e2) {
-					e2.printStackTrace();
-				}	
-		        
-				openFile(fileDestiny);
-				validate();
-				repaint();
-			 } else {
-				treeProcess.setModel(null);			
-				treeProcess.setCellRenderer(new TreeCellRenderer());		
-				diagramPanel.removeAll();
-				diagramPanel.setLayout(new BorderLayout(0, 0));
-				repaint();
-			 }
-	}
-	
-	public void openFile(File file) throws FileNotFoundException, IOException {
-        ModellingController.setDiagramPanel(diagramPanel);
-        ModellingController.setProcessPackageTree(treeProcess);
-        ModellingController.setPropertiesTabbedPane(tabbedPane);
-        ModellingController.setPropertiesScrollPane(scrollPane);
-        ModellingController.setSelectedComponent(null);
-        Modelling.newModelling();
-        ModellingController.initialize();
-        ModellingController.setAutoCreateRequiredElements(false);
-        ModellingFileManager.load(file.getPath());
-        ModellingController.setAutoCreateRequiredElements(true);
-}
-	protected void jMenuItemActionPerformed(ActionEvent arg0) {
-		jFrameTipos = new JFrame();
-		jFrameTipos.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		jFrameTipos.setBounds(100, 100, 450, 300);
-		jFrameTipos.setSize(700, 450);
-		jFrameTipos.getContentPane().add(new JPanelTelaTipos());
-		jFrameTipos.setTitle("Tipos");
-		jFrameTipos.setVisible(true); 
-		jFrameTipos.setIconImage(Toolkit.getDefaultToolkit().getImage(Spider_PE_Home.class.getResource("/br/ufpa/spider/pe/img/config/favicon_pe.png")));	
-		
-	
-		jFrameTipos.addWindowListener( new WindowListener(){  
-	    public void windowClosing( WindowEvent e )  
-	    {  
-	    	
-	    }  
-	    public void windowClosed( WindowEvent e )  
-	    {  
-	    	
-	    }  
-	    public void windowOpened( WindowEvent e ) {}  
-	    public void windowIconified( WindowEvent e ) {}  
-	    public void windowDeiconified( WindowEvent e ) {}  
-	    public void windowActivated( WindowEvent e ) {}  
-	    public void windowDeactivated( WindowEvent e ) {}  
-	} );
-}
-	
-	
-
-	private void populaComboBoxProcesso() {	
-		jComboBoxProcesso.addItem("Selecione...");
-		if(JDialog_Spider_Login.getInstance().getInstanciaLogado() instanceof Humano){
-			for (Processo processo : ((Humano) JDialog_Spider_Login.getInstance().getInstanciaLogado()).getGerente().getProcesso()) {
-				jComboBoxProcesso.addItem(processo);
-			}		
+			else JOptionPane.showMessageDialog(null, "Senha inv\u00E1lida.");		
 		}
 	}
-	
-	public Processo getProcesso(){
-		if(jComboBoxProcesso.getSelectedItem().toString().equals("Selecione..."))
-			return null;
+
+
+	private void recursoHumano() {
+		if(HumanoDAO.findByEmail(jTextFieldUsuario.getText())==null){
+			JOptionPane.showMessageDialog(null, "Usu\u00E1rio inv\u00E1lido.");
+		} else {
+			humano = HumanoDAO.findByEmail(jTextFieldUsuario.getText());
+			if(!humano.getProcessos().isEmpty()){
+				if(login(humano, jTextFieldSenha.getText())){
+					dispose();
+					JDialogWelcome.getInstance().setVisible(false);	
+					
+					logado = RH;
+					execution= new Spider_PE_Execution();
+					execution.setVisible(true);
+				}
+				else JOptionPane.showMessageDialog(null, "Senha inv\u00E1lida.");		
+			} else JOptionPane.showMessageDialog(null, "N\u00e3o h\u00e1 processos alocado para esse usu\u00e1rio.");
+		}
+		
+		Thread t1 = new Thread(execution);
+		//t1.start();
+		//t1.run();
+	}
+
+	private boolean login(Humano human, String password) {
+		if(human.getSenha().equals(password))
+			return true;
 		else
-			return (Processo) jComboBoxProcesso.getSelectedItem();
+			return false;
 	}
 
-	public JPanel getjPanelLeste() {
-		return jPanelLeste;
+	private boolean login(Usuario admin, String password) {
+		if(admin.getSenha().equals(password))
+			return true;
+		else
+			return false;
 	}
 
+	public int getLogado(){
+		return logado;
+	}	
+		
+	public synchronized static Spider_PE_Home getInstance() {
+		if (home == null){
+			home = new Spider_PE_Home();
+			}
+		return home;
+	}
+	
+	public Object getInstanciaLogado(){
+		if(logado == ADMIN)
+			return usuario;
+		else if (logado == RH)
+			return humano;
+		else if (logado == GERENTE)
+			return humano;
+		else
+			return null;		
+	}
 }

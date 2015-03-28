@@ -2,63 +2,67 @@ package br.ufpa.spider.pe.view.util;
 
 import javax.swing.ImageIcon;
 
+import br.ufpa.spider.pe.view.administration.JPanelFerramentaComunicacao;
+
 public class Icone {
 
-	private ImageIcon folderOpen = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/folder-open.png"));
+	private ImageIcon folderOpen = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/folder-open.png"));
 	
-	private ImageIcon form = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/form.png"));
+	private ImageIcon mailMarkRead = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/1331932826_mail-mark-read.png"));
 	
-	private ImageIcon history = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/history.png"));
+	private ImageIcon form = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/form.png"));
 	
-	private ImageIcon home = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/home.png"));
+	private ImageIcon history = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/history.png"));
 	
-	private ImageIcon logo_spider_pe = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/logo_spider-pe.png"));
+	private ImageIcon home = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/home.png"));
 	
-	private ImageIcon spider_cl = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/spider_cl.png"));
+	private ImageIcon logo_spider_pe = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/logo_spider-pe.png"));
 	
-	private ImageIcon spider_mplan = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/spider_mplan.png"));
+	private ImageIcon spider_cl = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/spider_cl.png"));
 	
-	private ImageIcon logout = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/logout.png"));
+	private ImageIcon spider_mplan = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/spider_mplan.png"));
 	
-	private ImageIcon process = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/process.png"));
+	private ImageIcon logout = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/logout.png"));
 	
-	private ImageIcon report = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/report.png"));
+	private ImageIcon process = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/process.png"));
 	
-	private ImageIcon user = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/user1.png"));
+	private ImageIcon report = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/report.png"));
 	
-	private ImageIcon baixar = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/download.png"));
+	private ImageIcon user = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/user1.png"));
 	
-	private ImageIcon excluir = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/drop.png"));
+	private ImageIcon baixar = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/download.png"));
 	
-	private ImageIcon spider_apf = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/logo_spider-apf.png"));
+	private ImageIcon excluir = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/drop.png"));
+	
+	private ImageIcon spider_apf = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/logo_spider-apf.png"));
 
-	private ImageIcon config = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/config.png"));
+	private ImageIcon config = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/config.png"));
 
-	private ImageIcon spider_ucp = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/logo_spider-ucp.png"));
+	private ImageIcon spider_ucp = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/logo_spider-ucp.png"));
 	
-	private ImageIcon spider_cocom = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/logo_spider-cocomo.png"));
+	private ImageIcon spider_cocom = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/logo_spider-cocomo.png"));
 	
-	private ImageIcon conversion = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/conversion.png"));
+	private ImageIcon conversion = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/conversion.png"));
 	
 
-	private ImageIcon folderOpenRepo = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/folder_open_repo.png"));
-	private ImageIcon folderClosed = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/folder_closed.png"));
-	private ImageIcon folderEnd = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/folder_end.png"));
-	private ImageIcon pdf = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/pdf.png"));
-	private ImageIcon xls = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/xls.png"));
-	private ImageIcon ppt = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/ppt.png"));
-	private ImageIcon doc = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/doc.png"));
-	private ImageIcon jar = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/jar.png"));
-	private ImageIcon java = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/java.png"));
-	private ImageIcon file = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/file.png"));
-	private ImageIcon txt = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/txt.png"));
-	private ImageIcon zip = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/zip.png"));
-	private ImageIcon nadadentro = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/nadadentro.png"));
-	private ImageIcon tool = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/config/tool_box.png"));
-	private ImageIcon tool_icon = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/config/tool.png"));
-	private ImageIcon clear = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/clear.png"));
-	private ImageIcon salvar = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/salvar.png"));
-	private ImageIcon pdf_download = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/img/pdf_download.png"));
+	private ImageIcon folderOpenRepo = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/folder_open_repo.png"));
+	private ImageIcon folderClosed = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/folder_closed.png"));
+	private ImageIcon folderEnd = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/folder_end.png"));
+	private ImageIcon pdf = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/pdf.png"));
+	private ImageIcon xls = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/xls.png"));
+	private ImageIcon ppt = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/ppt.png"));
+	private ImageIcon doc = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/doc.png"));
+	private ImageIcon jar = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/jar.png"));
+	private ImageIcon java = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/java.png"));
+	private ImageIcon file = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/file.png"));
+	private ImageIcon txt = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/txt.png"));
+	private ImageIcon zip = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/zip.png"));
+	private ImageIcon nadadentro = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/nadadentro.png"));
+	private ImageIcon tool = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/tool_box.png"));
+	private ImageIcon tool_icon = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/tool.png"));
+	private ImageIcon clear = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/clear.png"));
+	private ImageIcon salvar = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/salvar.png"));
+	private ImageIcon pdf_download = new ImageIcon(Icone.class.getResource("/br/ufpa/spider/pe/view/util/img/pdf_download.png"));
 	
 	
 	public ImageIcon getSpider_apf() {
@@ -262,6 +266,14 @@ public class Icone {
 
 	public void setConfig(ImageIcon config) {
 		this.config = config;
+	}
+
+	public ImageIcon getMailMarkRead() {
+		return mailMarkRead;
+	}
+
+	public void setMailMarkRead(ImageIcon mailMarkRead) {
+		this.mailMarkRead = mailMarkRead;
 	}
 
 }

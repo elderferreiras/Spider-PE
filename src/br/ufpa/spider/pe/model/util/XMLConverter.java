@@ -10,12 +10,12 @@ import javax.xml.stream.XMLStreamException;
 
 
 
-import br.ufpa.spider.pe.view.pm.model.Component;
-import br.ufpa.spider.pe.view.pm.model.ComponentType;
-import br.ufpa.spider.pe.view.pm.model.Modelling;
-import br.ufpa.spider.pe.view.pm.persistence.ModellingFileManager;
-import br.ufpa.spider.pe.view.pm.persistence.SimpleComponent;
-import br.ufpa.spider.pe.view.pm.persistence.SimpleModelling;
+import br.ufpa.spider.pe.view.execution.model.Component;
+import br.ufpa.spider.pe.view.execution.model.ComponentType;
+import br.ufpa.spider.pe.view.execution.model.Modelling;
+import br.ufpa.spider.pe.view.execution.persistence.ModellingFileManager;
+import br.ufpa.spider.pe.view.execution.persistence.SimpleComponent;
+import br.ufpa.spider.pe.view.execution.persistence.SimpleModelling;
 
 public class XMLConverter {
 	

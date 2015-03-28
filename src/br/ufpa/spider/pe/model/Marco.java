@@ -20,7 +20,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import br.ufpa.spider.pe.model.dao.TarefaDAO;
-import br.ufpa.spider.pe.view.pm.logic.TimeController;
+import br.ufpa.spider.pe.view.execution.logic.TimeController;
 
 @Entity(name="marco")
 public class Marco {
