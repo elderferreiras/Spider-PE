@@ -2,17 +2,22 @@ package br.ufpa.spider.pe.view.administration;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+
 import javax.swing.JPasswordField;
+
 import java.awt.Insets;
 import java.awt.Dimension;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
@@ -22,6 +27,7 @@ import br.ufpa.spider.pe.model.dao.GerenteProcessoDAO;
 import br.ufpa.spider.pe.model.dao.HumanoDAO;
 import br.ufpa.spider.pe.model.set.Usuario;
 import br.ufpa.spider.pe.model.set.dao.UsuarioDAO;
+import br.ufpa.spider.pe.view.util.PasswordSecurity;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -165,29 +171,42 @@ public class JDialogSenha extends JDialog {
 
 	protected void jButtonAlterarHumano() {
 		Humano humano = (Humano) usuario;
-		if(jTextFieldSenha.getText().equals(humano.getSenha())){
-			if(jTextFieldNovaSenha.getText().equals(jTextFieldRepetirSenha.getText())){
-				humano.setSenha(jTextFieldNovaSenha.getText());
-				humano.setEmail(jTextFieldLogin.getText());
-				HumanoDAO.updateHumano(humano);
-				JOptionPane.showMessageDialog(null, "Informações atualizadas.");
-				dispose();
-			} else JOptionPane.showMessageDialog(null, "Senhas não conferem.");
-		} else JOptionPane.showMessageDialog(null, "Senha antiga digitada errada.");
+		try {
+			if(jTextFieldSenha.getText().equals(PasswordSecurity.decrypt(humano.getSenha()))){
+				if(jTextFieldNovaSenha.getText().equals(jTextFieldRepetirSenha.getText())){
+					humano.setSenha(PasswordSecurity.encrypt(jTextFieldNovaSenha.getText()));
+					humano.setEmail(jTextFieldLogin.getText());
+					HumanoDAO.updateHumano(humano);
+					JOptionPane.showMessageDialog(null, "Informações atualizadas.");
+					dispose();
+				} else JOptionPane.showMessageDialog(null, "Senhas não conferem.");
+			} else JOptionPane.showMessageDialog(null, "Senha antiga digitada errada.");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 	}
 
 	protected void jButtonAlterarUsuario() {
 		Usuario admin = (Usuario) usuario;
-		if(jTextFieldSenha.getText().equals(admin.getSenha())){
-			if(jTextFieldNovaSenha.getText().equals(jTextFieldRepetirSenha.getText())){
-				admin.setSenha(jTextFieldNovaSenha.getText());
-				admin.setLogin(jTextFieldLogin.getText());
-				UsuarioDAO.updateUsuario(admin);
-				JOptionPane.showMessageDialog(null, "Informações atualizadas.");
-				dispose();
-			} else JOptionPane.showMessageDialog(null, "Senhas não conferem.");
-		} else JOptionPane.showMessageDialog(null, "Senha antiga digitada errada.");
+		try {
+			if(jTextFieldSenha.getText().equals(PasswordSecurity.decrypt(admin.getSenha()))){
+				if(jTextFieldNovaSenha.getText().equals(jTextFieldRepetirSenha.getText())){
+					admin.setSenha(PasswordSecurity.encrypt(jTextFieldNovaSenha.getText()));
+					admin.setLogin(jTextFieldLogin.getText());
+					UsuarioDAO.updateUsuario(admin);
+					JOptionPane.showMessageDialog(null, "Informações atualizadas.");
+					dispose();
+				} else JOptionPane.showMessageDialog(null, "Senhas não conferem.");
+			} else JOptionPane.showMessageDialog(null, "Senha antiga digitada errada.");
+		} catch (HeadlessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 	}
 

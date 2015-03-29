@@ -41,6 +41,7 @@ import br.ufpa.spider.pe.view.administration.Spider_PE_Administration;
 import br.ufpa.spider.pe.view.execution.gui.Spider_PE_Execution;
 import br.ufpa.spider.pe.view.management.JDialogWelcome;
 import br.ufpa.spider.pe.view.management.Spider_PE_Management;
+import br.ufpa.spider.pe.view.util.PasswordSecurity;
 
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
@@ -60,18 +61,6 @@ public class Spider_PE_Home extends JDialog {
 	private int logado = 0;
 	
 	public final static int ADMIN = 1;
-	public static int getAdmin() {
-		return ADMIN;
-	}
-
-	public static int getGerente() {
-		return GERENTE;
-	}
-
-	public static int getRh() {
-		return RH;
-	}
-
 	public final static int GERENTE = 2;
 	public final static int RH = 3;
 	
@@ -101,8 +90,13 @@ public class Spider_PE_Home extends JDialog {
 				if(UsuarioDAO.findAll().isEmpty() || UsuarioDAO.findAll() == null)
 				{
 					Usuario admin = new Usuario();
-					admin.setLogin("admin");
-					admin.setSenha("admin");
+					admin.setLogin("administrador.pe");
+					try {
+						admin.setSenha(PasswordSecurity.encrypt("jmml72"));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					admin.setNome("Administrador");
 					UsuarioDAO.createUsuario(admin);
 				}
@@ -271,7 +265,7 @@ public class Spider_PE_Home extends JDialog {
 		
 		jTextFieldSenha.setText("123456");
 		jTextFieldUsuario.setText("elderf@gmail.com");
-		comboBox.setSelectedItem("Usuï¿½rio do Processo");
+		comboBox.setSelectedItem("Usuário do Processo");
 		/*
 		jTextFieldSenha.setText("123");
 		jTextFieldUsuario.setText("andrecunhas@gmail.com");
@@ -358,17 +352,29 @@ public class Spider_PE_Home extends JDialog {
 	}
 
 	private boolean login(Humano human, String password) {
-		if(human.getSenha().equals(password))
-			return true;
-		else
-			return false;
+		try {
+			if(PasswordSecurity.decrypt(human.getSenha()).equals(password))
+				return true;
+			else
+				return false;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	private boolean login(Usuario admin, String password) {
-		if(admin.getSenha().equals(password))
-			return true;
-		else
-			return false;
+		try {
+			if(PasswordSecurity.decrypt(admin.getSenha()).equals(password))
+				return true;
+			else
+				return false;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public int getLogado(){
@@ -391,5 +397,17 @@ public class Spider_PE_Home extends JDialog {
 			return humano;
 		else
 			return null;		
+	}
+	
+	public static int getAdmin() {
+		return ADMIN;
+	}
+
+	public static int getGerente() {
+		return GERENTE;
+	}
+
+	public static int getRh() {
+		return RH;
 	}
 }

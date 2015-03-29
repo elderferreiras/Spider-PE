@@ -59,12 +59,12 @@ public class JFrameNotification extends JFrame {
 			if(tarefa.getStatus()!= null){
 				if(tarefa.getStatus().equals(ExecutionController.ATRASADA) &&
 						tarefa.getEstado().equals(ExecutionController.EXECUCAO)){
-					modelList.addElement("A Tarefa: "+tarefa.getNome()+" est√° ATRASADA");
+					modelList.addElement("A Tarefa: "+tarefa.getNome()+" est· ATRASADA");
 				}
 			 }
 		}
 		if(modelList.isEmpty()){
-			modelList.addElement("Sem notifica√ß√µes.");
+			modelList.addElement("Sem notificıes.");
 		}
 			
 	}

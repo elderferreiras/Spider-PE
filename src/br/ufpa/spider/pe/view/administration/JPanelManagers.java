@@ -4,16 +4,23 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.awt.GridBagLayout;
+
 import javax.swing.JTable;
+
 import java.awt.GridBagConstraints;
+
 import javax.swing.JButton;
+
 import java.awt.Insets;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
+
 import java.awt.Font;
+
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -33,6 +40,7 @@ import br.ufpa.spider.pe.model.dao.HumanoDAO;
 import br.ufpa.spider.pe.model.dao.ProcessoDAO;
 import br.ufpa.spider.pe.model.util.MyTableModel;
 import br.ufpa.spider.pe.view.util.Icone;
+import br.ufpa.spider.pe.view.util.PasswordSecurity;
 
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
@@ -294,7 +302,12 @@ public class JPanelManagers extends JPanel {
 			
 			humano = ((Humano)jComboBoxHumano.getSelectedItem());
 			humano.setEmail(jTextFieldLogin.getText());
-			humano.setSenha(jTextFieldSenha.getText());			
+			try {
+				humano.setSenha(PasswordSecurity.encrypt(jTextFieldSenha.getText()));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 			humano.setGerente(gerenteProcesso);			
 			HumanoDAO.updateHumano(humano);
 			

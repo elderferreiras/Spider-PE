@@ -43,6 +43,7 @@ import br.ufpa.spider.pe.model.dao.HumanoDAO;
 import br.ufpa.spider.pe.model.dao.ProcessoDAO;
 import br.ufpa.spider.pe.model.util.MyTableModel;
 import br.ufpa.spider.pe.view.Spider_PE_Home;
+import br.ufpa.spider.pe.view.util.PasswordSecurity;
 
 import javax.swing.ImageIcon;
 
@@ -702,7 +703,12 @@ public class JPanelCapacidades extends JPanel implements FocusListener {
 			if(!(listModelPapeisExercidos2.getSize() == 0)){
 				if(!(listModelFormacaoAcademica2.getSize() == 0)){					
 					humano = (Humano) jComboBoxHumano.getSelectedItem();
-					humano.setSenha("123456");					
+					try {
+						humano.setSenha(PasswordSecurity.encrypt((jTextFieldEmail.getText().split("@"))[0]));
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}					
 					humano.setEmail(jTextFieldEmail.getText());					
 					humano.setPapeisExercidos(setPapeis(humano));
 					humano.setFormacoesAcademicas(setFormacoes(humano));
