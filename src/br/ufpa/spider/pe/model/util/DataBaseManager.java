@@ -1,7 +1,18 @@
 package br.ufpa.spider.pe.model.util;
 
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import br.ufpa.spider.pe.model.Atividade;
 import br.ufpa.spider.pe.model.Campo;
@@ -44,6 +55,7 @@ import br.ufpa.spider.pe.model.set.SpiderCL;
 import br.ufpa.spider.pe.model.set.SpiderMPlan;
 import br.ufpa.spider.pe.model.set.Usuario;
 import br.ufpa.spider.pe.model.set.XML;
+import br.ufpa.spider.pe.view.util.PasswordSecurity;
 
 public class DataBaseManager {
 	private static EntityManagerFactory emf = null;
@@ -96,7 +108,50 @@ public class DataBaseManager {
 
 	
 	private DataBaseManager(){
-		emf = DynamicPersistenceUnits.createEMF(CLASSES, "localhost", "3306" , "spider_pe", "root", "root");
+		String HOST_NAME = "";
+		String PORT = "";
+		String USER = "";
+		String PASS = "";
+		
+		try {
+			File fXmlFile = new File("databaseConfig.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(fXmlFile);
+
+			doc.getDocumentElement().normalize();
+
+			System.out.println("Root element :"
+					+ doc.getDocumentElement().getNodeName());
+
+			NodeList nList = doc.getElementsByTagName("database");
+
+			System.out.println("----------------------------");
+
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+
+				Node nNode = nList.item(temp);
+
+				System.out.println("\nCurrent Element :"
+						+ nNode.getNodeName());
+
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+					Element eElement = (Element) nNode;
+					HOST_NAME = eElement.getElementsByTagName("hostName").item(0).getTextContent();
+					PORT = eElement.getElementsByTagName("port").item(0).getTextContent();
+					USER = eElement.getElementsByTagName("userName").item(0).getTextContent();
+					PASS = PasswordSecurity.decrypt(eElement.getElementsByTagName("password").item(0).getTextContent());
+
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+
+		emf = DynamicPersistenceUnits.createEMF(CLASSES, HOST_NAME, PORT , "spider_pe", USER, PASS);
 		em = emf.createEntityManager();
 		}
 	

@@ -1022,7 +1022,6 @@ public class Spider_PE_Administration extends JFrame {
 
 	protected void jButtonLogout() {
 		this.dispose();	
-		JDialogWelcome.getInstance().setVisible(true);
 		Spider_PE_Home.getInstance().setVisible(true);
 	}
 

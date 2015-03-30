@@ -9,6 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,8 +18,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+import br.ufpa.spider.pe.model.set.Usuario;
 import br.ufpa.spider.pe.model.set.dao.UsuarioDAO;
+import br.ufpa.spider.pe.view.util.PasswordSecurity;
+
 import java.awt.Insets;
+
 import javax.swing.JProgressBar;
 
 public class JDialogWelcome extends JFrame {
@@ -49,7 +54,6 @@ public class JDialogWelcome extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		getContentPane().setBackground(Color.WHITE);
 		this.setUndecorated(true); 
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -86,15 +90,15 @@ public class JDialogWelcome extends JFrame {
 		progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
 		progressBar.setStringPainted(true);
-		progressBar.setString("Carregando Banco de Dados...");
+		progressBar.setString("Carregando ferramenta Spider-PE...");
 		GridBagConstraints gbc_progressBar = new GridBagConstraints();
 		gbc_progressBar.fill = GridBagConstraints.HORIZONTAL;
 		gbc_progressBar.gridx = 0;
 		gbc_progressBar.gridy = 1;
 		panel.add(progressBar, gbc_progressBar);
-
 	}
 	
+
 	public synchronized static JDialogWelcome getInstance() {
 		if (home == null){
 			home = new JDialogWelcome();
